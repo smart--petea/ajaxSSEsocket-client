@@ -2,7 +2,11 @@
 	"name": "ajaxSSEsocket-client",
 	"description": "sockets on base of AJAX and SSE technology - client side",
 	"author": "Badarau Petru",
+	"scripts": {
+		"test": "mocha"
+	},
 	"dependencies": {
-		"mocha": ">=2.0.1"
+		"mocha": ">=2.0.1",
+		"should": ">=4.3.0"
 	}
 }
