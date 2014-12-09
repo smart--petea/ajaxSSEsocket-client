@@ -2,6 +2,39 @@ var util = require('../lib/util');
 var should = require('should');
 
 describe('util', function() {
+	describe('#isObject', function() {
+		it('[] - true', function() {
+			util.isObject([]).should.be.true;
+		});
+
+		it('{} - true', function() {
+			util.isObject({}).should.be.true;
+		});
+
+		it('new Object - true', function() {
+			util.isObject(new Object).should.be.true;
+		});
+
+		it('1 - false', function() {
+			util.isObject(1).should.be.false;
+		});
+
+		it('null - false', function() {
+			util.isObject(null).should.be.false;
+		});
+
+		it('undefined - false', function() {
+			util.isObject(null).should.be.false;
+		});
+
+		it('boolean - false', function() {
+			util.isObject(true).should.be.false;
+		});
+
+		it('string - false', function() {
+			util.isObject("ok").should.be.false;
+		});
+	});
 	describe('#isFunction', function() {
 		it('[] - false', function(){
 			util.isFunction([]).should.be.false;
