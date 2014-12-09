@@ -2,6 +2,24 @@ var util = require('../lib/util');
 var should = require('should');
 
 describe('util', function() {
+	describe('#isFunction', function() {
+		it('[] - false', function(){
+			util.isFunction([]).should.be.false;
+		});
+
+		it('function(){} - true', function() {
+			util.isFunction(function(){}).should.be.true;
+		});
+
+		it('{} - false', function(){
+			util.isFunction({}).should.be.false;
+		});
+
+		it('new Function - true', function() {
+			util.isFunction(new Function).should.be.true;
+		});
+	});
+
 	describe('#isArray', function() {
 		it('["a", "b"] - true', function(){
 			util.isArray(["a", "b"]).should.be.true;
