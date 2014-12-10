@@ -3,26 +3,45 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('events - newListener', function() {
-		it('(event, listener)', function() {
+		it('check arguments', function() {
 			var ee = new EE;
 			var eventName = 'eventName';
 			var eventListener = function(){};
 
-			var counter = 0;
-
 			ee.on('newListener', function(evName, evListener) {
 				evName.should.equal(eventName);
 				evListener.should.equal(eventListener);
-				++counter;
 			});
 
-			//register for event
-			//newListener for this event must be called only once
 			ee.on(eventName, eventListener);
-			ee.on(eventName, eventListener);
-			ee.on(eventName, eventListener);
+		});
 
-			counter.should.equal(1);
+		it('same type of listeners - fired once', function() {
+			var ee = new EE;
+			var eventName = 'eventName';
+			var evL1 = function(){};
+			var evL2 = function(){};
+
+			var count = 0;
+
+			ee.on('newListener', function(evName, evListener) {
+				evListener === evL1 && ++count;
+				evListener === evL2 && ++count;
+			});
+
+			ee.on(eventName, evL1);
+			ee.on(eventName, evL2);
+			ee.on(eventName, evL1);
+			ee.on(eventName, evL1);
+			ee.on(eventName, evL2);
+			ee.on(eventName, evL2);
+
+			count.should.equal(2);
+		});
+	});
+
+	describe('events - removeListener', function() {
+		it('(event, listener)', function() {
 		});
 	});
 });
