@@ -141,6 +141,11 @@ describe('EventEmitter', function() {
 					.once(evName, function(){})
 					.emit(evName);
 			});
+
+			it('must return emitter', function() {
+				var ee = new EE;
+				ee.once('ok', function(){}).should.equal(ee);
+			});
 		});
 		describe('#on', function() {
 			it('(evName, lsn)', function() {
@@ -220,6 +225,11 @@ describe('EventEmitter', function() {
 				} catch (e) {
 					e.message.should.be.equal("listeners are not either array or function");
 				}
+			});
+
+			it('must return emitter', function() {
+				var ee = new EE;
+				ee.on('ok', function(){}).should.equal(ee);
 			});
 		});
 	});
