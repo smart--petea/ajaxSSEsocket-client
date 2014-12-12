@@ -3,6 +3,38 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('methods', function() {
+		describe('#once vs #on', function() {
+			it('listeners = lsnsOnce + lsnsOn', function(){
+				var ee = new EE;
+				var eventName = 'eventName';
+
+
+				ee.on(eventName, function(){});
+				ee.once(eventName, function(){});
+				ee.listeners(eventName).should.length(2);
+				
+				ee.emit(eventName);
+
+				ee.listeners(eventName).should.length(1);
+			});
+
+			it('lsnOnce !== lsnOn', function(done) {
+				var ee = new EE;
+				var eventName = 'eventName';
+				var lsnOnce = function(){};
+
+				ee.on(eventName, function(){});
+				ee.once(eventName, lsnOnce);
+				ee.on('removeListener', function(event, lsn) {
+					event.should.equal(eventName);
+					lsn.should.equal(lsnOnce);
+
+					done();
+				});
+
+				ee.emit(eventName);
+			});
+		});
 		describe('#once', function() {
 			it('(evName, lsn)', function() {
 				var ee = new EE;
