@@ -3,6 +3,60 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('methods', function() {
+		describe('#removeListener', function() {
+			it('(event) - error, listener is not defined', function() {
+				try {
+					(new EE).removeListener('ok');
+				} catch (e) {
+					e.message.should.equal("listener must be function");
+				}
+			});
+
+			it('({}, lsn) - error, event must be string', function(){
+				try {
+					(new EE).removeListener({}, function(){});
+				} catch (e) {
+					e.message.should.equal("event must be string");
+				}
+			});
+
+			it('should remove listener', function() {
+				var ee = new EE;
+				var eventName = 'eventName';
+				var lsnOnce = function(){};
+				var lsnOn = function(){};
+
+				ee.on(eventName, lsnOn);
+				ee.once(eventName, lsnOnce);
+				ee.listeners(eventName).should.length(2);
+
+				ee.removeListener(eventName, lsnOn);
+				ee.listeners(eventName).should.length(1);
+
+				ee.removeListener(eventName, lsnOnce);
+				ee.listeners(eventName).should.length(0);
+			})
+
+			it('should return emitter', function() {
+				var ee = new EE;
+				ee.removeListener('ok', function(){}).should.equal(ee);
+			});
+
+			it('should generate `removeListener` event', function(done) {
+				var ee = new EE;
+				var eventName = 'eventName';
+				var evLsn = function(){};
+
+				ee.on(eventName, evLsn);
+				ee.on('removeListener', function(event) { 
+					event.should.equal(eventName);
+					done();
+				});	
+
+				ee.removeListener(eventName, evLsn);
+			});
+		});
+
 		describe('#once vs #on', function() {
 			it('listeners = lsnsOnce + lsnsOn', function(){
 				var ee = new EE;
