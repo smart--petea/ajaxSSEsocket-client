@@ -3,6 +3,80 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('methods', function() {
+		describe('#removeAllListener', function() {
+			it('should return emitter', function() {
+				var ee = new EE;
+				ee.removeAllListeners('ok').should.equal(ee);
+			});
+
+			it('({}) - error, event is not string either undefined', function() {
+				try {
+					(new EE).removeAllListeners({});
+				} catch (e) {
+					e.message.should.equal('event argument is not either string or undefined');
+				}
+			});
+
+			it('(evName) - remove all listeners for evName', function(done) {
+				var ee = new EE;
+				var eventName = 'eventName';
+
+				ee
+					.on(eventName, function(){})
+					.once(eventName, function(){})
+					.removeAllListeners(eventName)
+					.on('done', function() {
+						ee.listeners(eventName).should.length(0);
+						done();
+					})
+					.emit('done');
+			})
+
+			it('() - remove all listeners from system, clear off length for event name', function(done) {
+				var ee = new EE;
+				var ev1 = 'ev1';
+				var ev2 = 'ev2';
+
+				ee
+					.on(ev1, function(){})
+					.on(ev1, function(){})
+					.on(ev2, function(){})
+					.on(ev2, function(){});
+
+				ee.removeAllListeners();
+
+				ee
+					.on('ok', function(){
+						ee.listeners(ev1).should.length(0);
+						ee.listeners(ev2).should.length(0);
+						done();
+					})
+					.emit('ok');
+			});
+
+			it('() - remove all listeners from system, emit `removeListener` for each listener', function(done) {
+				var ee = new EE,
+					ev1 = 'ev1',
+					ev2 = 'ev2',
+					count = 0;
+
+				ee
+					.on(ev1, function(){})
+					.on(ev1, function(){})
+					.on(ev2, function(){})
+					.on(ev2, function(){})
+					.on('removeListener', function() {
+						count++;
+					})
+					.removeAllListeners()
+					.on('ok', function(){
+						count.should.be.equal(4);
+						done();
+					})
+					.emit('ok');
+			});
+		});
+
 		describe('#removeListener', function() {
 			it('(event) - error, listener is not defined', function() {
 				try {
