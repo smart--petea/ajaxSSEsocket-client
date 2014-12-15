@@ -3,6 +3,39 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('methods', function() {
+		describe('#listeners', function() {
+			it('() - return []', function() {
+				(new EE).listeners().should.length(0);
+			});
+
+			it('("non existent") - return []', function() {
+				(new EE).listeners().should.length(0);
+			});
+
+			it('("existent") - return array of size 3', function() {
+				var ev1 = 'existent';
+				(new EE)
+					.on(ev1, function(){})
+					.once(ev1, function(){})
+					.on(ev1, function(){})
+					.listeners(ev1).should.length(3);
+			})
+
+			it('("existent") - return shallow copy of listeners array', function() {
+				var ev1 = 'existent';
+				var ee = new EE;
+
+				var listeners = ee
+									.on(ev1, function(){})
+									.on(ev1, function(){})
+									.listeners(ev1);
+
+				listeners.length = 0;
+
+				ee.listeners(ev1).should.length(2);
+			});
+		});
+
 		describe('#setMaxListeners', function() {
 			it('() - throw not number', function() {
 				try {
