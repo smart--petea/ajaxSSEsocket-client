@@ -3,6 +3,32 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('methods', function() {
+		describe('#setMaxListeners', function() {
+			it('() - throw not number', function() {
+				try {
+					(new EE).setMaxListeners();
+				} catch (e) {
+					e.message.should.equal("not number");
+				}
+			});
+
+			it('("ok") - throw not number', function() {
+				try {
+					(new EE).setMaxListeners("ok");
+				} catch (e) {
+					e.message.should.equal("not number");
+				}
+			});
+
+			it('(-1) - throw "negative number"', function() {
+				try {
+					(new EE).setMaxListeners(-1);
+				} catch (e) {
+					e.message.should.equal("negative number");
+				}
+			});
+		});
+
 		describe('#removeAllListener', function() {
 			it('should return emitter', function() {
 				var ee = new EE;
