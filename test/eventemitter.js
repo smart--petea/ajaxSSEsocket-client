@@ -3,6 +3,75 @@ var should = require('should');
 
 describe('EventEmitter', function() {
 	describe('methods', function() {
+		describe('#emit', function(){
+			it('() - throw error "event name is not string"', function() {
+				try {
+					(new EE).emit();
+				} catch (e) {
+					e.message.should.equal("event name is not string");
+				}
+			});
+
+			it('({}) - throw error "event name is not string"', function() {
+				try {
+					(new EE).emit({});
+				} catch (e) {
+					e.message.should.equal("event name is not string");
+				}
+			});
+
+			it('("event", "arg1", 1, {a: "a"}, [2, 2]) - on', function(done) {
+				var ev = "event";
+				var ag1 = "arg1";
+				var ag2 = 1;
+				var ag3 = {a: "a"};
+				var ag4 = [2, 2];
+
+				function eventClbk(arg1, arg2, arg3, arg4) {
+					arg1.should.equal(ag1);
+					arg2.should.equal(ag2);
+					arg3.should.equal(ag3);
+					arg4.should.equal(ag4);
+					done();
+				}
+
+				(new EE)
+					.on(ev, eventClbk)
+					.emit(ev, ag1, ag2, ag3, ag4);
+			});
+
+			it('("event", "arg1", 1, {a: "a"}, [2, 2]) - once', function(done) {
+				var ev = "event";
+				var ag1 = "arg1";
+				var ag2 = 1;
+				var ag3 = {a: "a"};
+				var ag4 = [2, 2];
+
+				function eventClbk(arg1, arg2, arg3, arg4) {
+					arg1.should.equal(ag1);
+					arg2.should.equal(ag2);
+					arg3.should.equal(ag3);
+					arg4.should.equal(ag4);
+					done();
+				}
+
+				(new EE)
+					.once(ev, eventClbk)
+					.emit(ev, ag1, ag2, ag3, ag4);
+			});
+
+			it('("event") - return false if no listeners', function() {
+				(new EE).emit("event").should.be.false;
+			});
+
+			it('("event") - return true if exist listeners', function() {
+				(new EE)
+					.on("event", function(){})
+					.emit("event")
+					.should.be.true;
+			});
+		});
+
 		describe('#listeners', function() {
 			it('() - return []', function() {
 				(new EE).listeners().should.length(0);
