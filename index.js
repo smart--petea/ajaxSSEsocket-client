@@ -1,2 +1,1 @@
-function Socket() {
-}
+module.exports = require('./lib');
