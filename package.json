@@ -3,7 +3,8 @@
   "description": "sockets on base of AJAX and SSE technology - client side",
   "author": "Badarau Petru",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "node_modules/browserify/bin/cmd.js index.js -o ajaxSSE_client.js"
   },
   "dependencies": {
     "mocha": ">=2.0.1",
